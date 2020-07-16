@@ -31,11 +31,12 @@ public class ImageController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteImage(@PathVariable("id") UUID imageId) {
-
+        imageService.deleteImage(imageId);
     }
 
     @DeleteMapping("/purge")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void purgeImages(){
+    public void purgeImages() {
+        imageService.purgeImages();
     }
 }

@@ -12,6 +12,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.UUID;
 import java.util.concurrent.*;
 
 @Slf4j
@@ -86,5 +88,21 @@ public class ImageService {
 
             return DHasher.calculateHash(fileBytes);
         }
+    }
+
+    public void deleteImage(UUID id) {
+        var image = imageRepository.findById(id);
+        if (image.isPresent()) {
+            fileSystem.deleteFile(image.get().getPath());
+            imageRepository.deleteById(id);
+        }
+    }
+
+    public void purgeImages() {
+        var images = imageRepository.findAll();
+        for (Image image : images) {
+            fileSystem.deleteFile(image.getPath());
+        }
+        imageRepository.deleteAll();
     }
 }

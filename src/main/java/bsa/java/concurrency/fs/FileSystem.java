@@ -18,4 +18,6 @@ public interface FileSystem {
     File transferToFile(MultipartFile multipartFile);
 
     Path transferToPath(MultipartFile multipartFile);
+
+    void deleteFile(String path);
 }

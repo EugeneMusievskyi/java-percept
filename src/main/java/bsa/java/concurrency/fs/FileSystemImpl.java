@@ -59,4 +59,13 @@ public class FileSystemImpl implements FileSystem {
             return null;
         }
     }
+
+    public void deleteFile(String filePath) {
+        var path = Paths.get(filePath);
+        try {
+            Files.deleteIfExists(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
