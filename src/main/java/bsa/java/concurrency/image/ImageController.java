@@ -1,6 +1,7 @@
 package bsa.java.concurrency.image;
 
 import bsa.java.concurrency.image.dto.SearchResultDTO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -12,9 +13,13 @@ import java.util.UUID;
 @RequestMapping("/image")
 public class ImageController {
 
+    @Autowired
+    private ImageService imageService;
+
     @PostMapping("/batch")
     @ResponseStatus(HttpStatus.CREATED)
     public void batchUploadImages(@RequestParam("images") MultipartFile[] files) {
+        imageService.save(files);
     }
 
     @PostMapping("/search")
