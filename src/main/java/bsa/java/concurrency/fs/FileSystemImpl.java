@@ -74,12 +74,23 @@ public class FileSystemImpl implements FileSystem {
         }
     }
 
+    @Override
     public void deleteFile(String filePath) {
         var path = Paths.get(filePath);
         try {
             Files.deleteIfExists(path);
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void deleteAll() {
+        File[] files = directory.listFiles();
+        if (files != null) {
+            for (File file : files) {
+                file.delete();
+            }
         }
     }
 

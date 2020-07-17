@@ -21,4 +21,6 @@ public interface FileSystem {
     Path transferToPath(MultipartFile multipartFile);
 
     void deleteFile(String path);
+
+    void deleteAll();
 }

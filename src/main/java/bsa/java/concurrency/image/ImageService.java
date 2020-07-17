@@ -74,10 +74,7 @@ public class ImageService {
     }
 
     public void purgeImages() {
-        var images = imageRepository.findAll();
-        for (Image image : images) {
-            fileSystem.deleteFile(image.getPath());
-        }
+        fileSystem.deleteAll();
         imageRepository.deleteAll();
     }
 
