@@ -5,19 +5,18 @@ import bsa.java.concurrency.image.dto.SearchResultDTO;
 import bsa.java.concurrency.image.service.DHasher;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.BufferedInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Slf4j
 @Service
@@ -30,10 +29,7 @@ public class ImageService {
 
     private ExecutorService executorService;
 
-    private static final Object lock = new Object();
-
     public ImageService() {
-//        executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
         executorService = Executors.newCachedThreadPool();
     }
 
