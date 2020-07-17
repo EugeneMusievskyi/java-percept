@@ -28,7 +28,7 @@ public class ImageController {
     @PostMapping("/search")
     @ResponseStatus(HttpStatus.OK)
     public List<SearchResultDTO> searchMatches(@RequestParam("image") MultipartFile file, @RequestParam(value = "threshold", defaultValue = "0.9") double threshold) {
-        log.info(String.format("image/search request. file name: %s, file size: %d, threshold: %d", file.getName(), file.getSize(), threshold));
+        log.info(String.format("image/search request. file name: %s, file size: %d, threshold: %f", file.getName(), file.getSize(), threshold));
         return imageService.searchImage(file, threshold);
     }
 
