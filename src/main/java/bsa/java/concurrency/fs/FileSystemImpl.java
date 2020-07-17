@@ -1,7 +1,8 @@
 package bsa.java.concurrency.fs;
 
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.EnableAsync;
+import bsa.java.concurrency.image.Image;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,15 +17,22 @@ import java.util.concurrent.CompletableFuture;
 public class FileSystemImpl implements FileSystem {
     private File directory;
 
-    public FileSystemImpl() {
+    private String serverPort;
+
+    private String filesUrlTemplate;
+
+    @Autowired
+    public FileSystemImpl(FileSystemConfigurationProperties properties) {
         directory = new File("images/");
         if (!directory.exists()) {
             directory.mkdir();
         }
+
+        filesUrlTemplate = String.format("http://127.0.0.1:%s/files/", properties.port);
     }
 
     @Override
-    public CompletableFuture<String> saveFile(Path path, byte[] file) {
+    public CompletableFuture<Image> saveFile(Path path, byte[] file) {
         return CompletableFuture.supplyAsync(() -> {
             try {
                 Files.write(path, file);
@@ -32,7 +40,11 @@ public class FileSystemImpl implements FileSystem {
                 e.printStackTrace();
             }
 
-            return path.toString();
+            String fileName = path.getFileName().toString();
+            String id = fileName.substring(0, fileName.indexOf(getFileExtension(fileName)));
+            String fileUrl = filesUrlTemplate + fileName;
+
+            return new Image(UUID.fromString(id), path.toString(), fileUrl, null);
         });
     }
 
@@ -50,7 +62,9 @@ public class FileSystemImpl implements FileSystem {
 
     @Override
     public Path transferToPath(MultipartFile multipartFile) {
-        Path path = Paths.get(directory.getPath() + "/" + multipartFile.getOriginalFilename());
+        UUID id = UUID.randomUUID();
+        String extension = getFileExtension(multipartFile.getOriginalFilename());
+        Path path = Paths.get(directory.getPath() + "/" + id + extension);
         try {
             multipartFile.transferTo(path);
             return path;
@@ -67,5 +81,18 @@ public class FileSystemImpl implements FileSystem {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public String getFileExtension(String fileName) {
+        String extension = "";
+
+        int i = fileName.lastIndexOf('.');
+        int p = Math.max(fileName.lastIndexOf('/'), fileName.lastIndexOf('\\'));
+
+        if (i > p) {
+            extension = fileName.substring(i);
+        }
+
+        return extension;
     }
 }

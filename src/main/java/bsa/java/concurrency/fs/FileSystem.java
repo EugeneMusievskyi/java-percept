@@ -1,5 +1,6 @@
 package bsa.java.concurrency.fs;
 
+import bsa.java.concurrency.image.Image;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -12,7 +13,7 @@ import java.util.concurrent.CompletableFuture;
 // При работе с файловой системой вы можете использовать блокирующие вызовы, просто оберните результат в CompletableFuture
 public interface FileSystem {
     //TODO: Можете изменить сигнатуру метода, она здесь в качестве примера
-        CompletableFuture<String> saveFile(Path path, byte[] file);
+        CompletableFuture<Image> saveFile(Path path, byte[] file);
     //TODO: Add extra methods here
 
     File transferToFile(MultipartFile multipartFile);

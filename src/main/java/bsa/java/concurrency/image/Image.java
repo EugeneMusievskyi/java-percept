@@ -12,18 +12,15 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@RequiredArgsConstructor
 @Entity
 @Table(name = "images")
 public class Image {
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     UUID id;
 
-    @NonNull
     String path;
 
-    @NonNull
+    String url;
+
     Long hash;
 }
