@@ -19,11 +19,11 @@ $$ LANGUAGE plpgsql;
 
 ------------------------------------------------------------------------------------------------------------------
 CREATE OR REPLACE FUNCTION search_image(imageHash bigint, threshold double precision)
-    RETURNS table (imageId VARCHAR, matchPercent double precision, imageUrl varchar)
+RETURNS table (imageId VARCHAR, matchPercent double precision, imageUrl varchar)
 AS $$
 BEGIN
-    return QUERY (SELECT cast(i.id as VARCHAR) AS imageId, (1 - bitcount(i.hash # imageHash) / 64) AS matchPercent, i.url AS imageUrl
-                  FROM images i WHERE (1 - bitcount(i.hash # imageHash) / 64) >= threshold);
+    return QUERY (SELECT cast(i.id as VARCHAR) AS imageId, match_percent(i.hash, imageHash) AS matchPercent, i.url AS imageUrl
+                  FROM images i WHERE match_percent(i.hash, imageHash) >= threshold);
 END
 $$
 LANGUAGE plpgsql
