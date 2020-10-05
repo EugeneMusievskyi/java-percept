@@ -1,4 +1,4 @@
- CREATE OR REPLACE FUNCTION bitcount(i bigint) RETURNS double precision AS $$
+CREATE OR REPLACE FUNCTION bitcount(i bigint) RETURNS double precision AS $$
 DECLARE n integer;
 DECLARE amount double precision;
 BEGIN
@@ -10,14 +10,14 @@ RETURN amount;
 END
 $$ LANGUAGE plpgsql;
 
- ------------------------------------------------------------------------------------------------------------------
+##############################################################################################################################
 CREATE OR REPLACE FUNCTION match_percent(a bigint, b bigint) RETURNS double precision AS $$
 BEGIN
     RETURN 1 - bitcount(a # b) / 64;
 END
 $$ LANGUAGE plpgsql;
 
-------------------------------------------------------------------------------------------------------------------
+######################################################################################################################
 CREATE OR REPLACE FUNCTION search_image(imageHash bigint, threshold double precision)
 RETURNS table (imageId VARCHAR, matchPercent double precision, imageUrl varchar)
 AS $$
